@@ -33,10 +33,6 @@
         <servlet-class>com.mycompany.aplikasi_padel_tubes_pbo.controller.CommunityController</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>CreateCommunityController</servlet-name>
-        <servlet-class>com.mycompany.aplikasi_padel_tubes_pbo.controller.CreateCommunityController</servlet-class>
-    </servlet>
-    <servlet>
         <servlet-name>ClubDetailController</servlet-name>
         <servlet-class>com.mycompany.aplikasi_padel_tubes_pbo.controller.ClubDetailController</servlet-class>
     </servlet>
@@ -47,6 +43,10 @@
     <servlet>
         <servlet-name>MySquadController</servlet-name>
         <servlet-class>com.mycompany.aplikasi_padel_tubes_pbo.controller.MySquadController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>createcommunitycontroller</servlet-name>
+        <servlet-class>com.mycompany.aplikasi_padel_tubes_pbo.controller.createcommunitycontroller</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>PadelController</servlet-name>
@@ -81,10 +81,6 @@
         <url-pattern>/CommunityController</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>CreateCommunityController</servlet-name>
-        <url-pattern>/CreateCommunityController</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
         <servlet-name>ClubDetailController</servlet-name>
         <url-pattern>/ClubDetailController</url-pattern>
     </servlet-mapping>
@@ -95,6 +91,10 @@
     <servlet-mapping>
         <servlet-name>MySquadController</servlet-name>
         <url-pattern>/MySquadController</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>createcommunitycontroller</servlet-name>
+        <url-pattern>/createcommunitycontroller</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
