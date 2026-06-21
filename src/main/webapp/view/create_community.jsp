@@ -25,7 +25,7 @@
                 </h1>
             </div>
             <div class="flex-1 border-r border-grid hidden md:flex items-center px-8">
-                <a href="../CommunityController" class="text-xs font-bold uppercase tracking-widest hover:underline">← Back</a>
+                <a href="CommunityController" class="text-xs font-bold uppercase tracking-widest hover:underline">← Back</a>
             </div>
             <div class="p-4 md:p-6 w-1/2 md:w-1/4 flex items-center justify-end gap-4">
                 <span class="text-[10px] font-bold uppercase tracking-widest"><%= session.getAttribute("user")%></span>
@@ -58,6 +58,26 @@
                         <label class="text-xs font-bold uppercase opacity-50 block mb-2">Club Description</label>
                         <textarea name="description" rows="4" placeholder="DESCRIBE YOUR COMMUNITY..." 
                                   class="w-full bg-transparent text-lg font-bold outline-none uppercase resize-none" required></textarea>
+                    </div>
+
+                    <div class="border-b-2 border-black pb-4">
+                        <label class="text-xs font-bold uppercase opacity-50 block mb-4">Club Type</label>
+                        <div class="flex gap-4">
+                            <label class="flex-1 flex items-center gap-2 cursor-pointer border-2 border-black p-4 hover:bg-gray-100 transition-colors">
+                                <input type="radio" name="type" value="PUBLIC" class="w-4 h-4 text-lime-400 focus:ring-lime-400 border-black" checked>
+                                <div>
+                                    <span class="font-black uppercase text-sm block">Public</span>
+                                    <span class="text-[10px] font-bold uppercase opacity-50 block">Anyone can join instantly</span>
+                                </div>
+                            </label>
+                            <label class="flex-1 flex items-center gap-2 cursor-pointer border-2 border-black p-4 hover:bg-gray-100 transition-colors">
+                                <input type="radio" name="type" value="PRIVATE" class="w-4 h-4 text-red-500 focus:ring-red-500 border-black">
+                                <div>
+                                    <span class="font-black uppercase text-sm block">Private</span>
+                                    <span class="text-[10px] font-bold uppercase opacity-50 block">Requires Admin approval</span>
+                                </div>
+                            </label>
+                        </div>
                     </div>
 
                     <div class="pt-8">

@@ -44,7 +44,7 @@ public class CommunityController extends HttpServlet {
         List<Map<String, Object>> listClub = new ArrayList<>();
 
         try (Connection conn = Koneksi.getConnection()) {
-            String sql = "SELECT club_id, name, description, status FROM club ORDER BY club_id DESC";
+            String sql = "SELECT club_id, name, description, status, type FROM club ORDER BY club_id DESC";
             PreparedStatement ps = conn.prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
 
@@ -54,6 +54,7 @@ public class CommunityController extends HttpServlet {
                 club.put("name", rs.getString("name"));
                 club.put("description", rs.getString("description"));
                 club.put("status", rs.getString("status"));
+                club.put("type", rs.getString("type"));
                 
                 listClub.add(club);
             }
@@ -83,10 +84,14 @@ public class CommunityController extends HttpServlet {
 
         String name = request.getParameter("name");
         String description = request.getParameter("description");
+        String type = request.getParameter("type");
+        if (type == null || type.trim().isEmpty()) {
+            type = "PUBLIC";
+        }
         
 
         if (name == null || name.trim().isEmpty() || description == null || description.trim().isEmpty()) {
-            response.sendRedirect("view/community.jsp?status=empty_field");
+            response.sendRedirect("CommunityController?status=empty_field");
             return;
         }
 
@@ -97,33 +102,46 @@ public class CommunityController extends HttpServlet {
             ResultSet rs = checkPs.executeQuery();
 
             if (rs.next() && rs.getInt(1) > 0) {
-                response.sendRedirect("view/community.jsp?status=already_exists");
+                response.sendRedirect("CommunityController?status=already_exists");
                 return;
             }
 
-          // 1. Tambah kolom 'created_by' dan satu tanda tanya lagi '?'
-String sql = "INSERT INTO club (name, description, created_at, created_by) VALUES (?, ?, ?, ?)";
-PreparedStatement ps = conn.prepareStatement(sql);
+            // 1. Tambah kolom 'created_by' dan 'type'
+            String sql = "INSERT INTO club (name, description, created_at, created_by, type) VALUES (?, ?, ?, ?, ?)";
+            PreparedStatement ps = conn.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
 
-ps.setString(1, name);
-ps.setString(2, description);
-ps.setTimestamp(3, currenttime);
+            ps.setString(1, name);
+            ps.setString(2, description);
+            ps.setTimestamp(3, currenttime);
 
-// 2. MASUKIN BARIS INI (Ini jawabannya)
-// Kita ambil userId dari userObj yang sudah kamu buat di baris 66
-ps.setInt(4, Integer.parseInt(userObj.toString()));
+            // 2. MASUKIN BARIS INI (Ini jawabannya)
+            // Kita ambil userId dari userObj yang sudah kamu buat di baris 66
+            int userId = Integer.parseInt(userObj.toString());
+            ps.setInt(4, userId);
+            ps.setString(5, type);
             //gimana caranya ini ngerekam user_id yang lagi buat community baru
             
 
             int rowInserted = ps.executeUpdate();
             if (rowInserted > 0) {
+                // Get generated club_id and insert into club_member
+                ResultSet rsKeys = ps.getGeneratedKeys();
+                if (rsKeys.next()) {
+                    int newClubId = rsKeys.getInt(1);
+                    String memberSql = "INSERT INTO club_member (club_id, user_id) VALUES (?, ?)";
+                    try (PreparedStatement memberPs = conn.prepareStatement(memberSql)) {
+                        memberPs.setInt(1, newClubId);
+                        memberPs.setInt(2, userId);
+                        memberPs.executeUpdate();
+                    }
+                }
                 response.sendRedirect("CommunityController?status=success");
             } else {
-                response.sendRedirect("view/community.jsp?status=failed");
+                response.sendRedirect("CommunityController?status=failed");
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            response.sendRedirect("view/community.jsp?status=error");
+            response.sendRedirect("CommunityController?status=error");
         }
     
     }

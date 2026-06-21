@@ -45,7 +45,8 @@
                 <a href="/index.jsp" class="text-xs font-bold uppercase tracking-widest hover:underline">← Back to Dashboard</a>
             </div>
             <div class="p-4 md:p-6 w-1/2 md:w-1/4 flex items-center justify-end gap-4">
-                <span class="text-[10px] font-bold uppercase tracking-widest">
+                <a href="AchievementController" class="text-[10px] font-bold uppercase tracking-widest hover:text-blue-500">Achievements</a>
+                <span class="text-[10px] font-bold uppercase tracking-widest border-l border-grid pl-4">
                     <%= session.getAttribute("user")%>
                 </span>
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5">

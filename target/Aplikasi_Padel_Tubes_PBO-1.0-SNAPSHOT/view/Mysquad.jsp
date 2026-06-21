@@ -25,7 +25,8 @@
                 <span class="text-xs font-bold uppercase tracking-widest text-blue-400">My Squads</span>
             </div>
             <div class="p-4 md:p-6 w-1/2 md:w-1/4 flex items-center justify-end gap-4">
-                <span class="text-[10px] font-bold uppercase tracking-widest">
+                <a href="AchievementController" class="text-[10px] font-bold uppercase tracking-widest hover:text-blue-500">Achievements</a>
+                <span class="text-[10px] font-bold uppercase tracking-widest border-l border-grid pl-4">
                     <%= (session.getAttribute("user") != null) ? session.getAttribute("user") : "PLAYER" %>
                 </span>
             </div>
@@ -57,8 +58,8 @@
                                 <p class="text-xs font-bold text-gray-500 uppercase mb-6"><%= clubItem.get("description") %></p>
                             </div>
                             <div class="flex gap-2">
-                                <a href="ClubDetailController?id=<%= clubItem.get("club_id") %>" class="flex-1 text-center bg-black text-white py-3 font-bold uppercase text-[10px] border-2 border-black hover:bg-blue-400 transition-colors">View Detail</a>
-                                <a href="LeaveController?club_id=<%= clubItem.get("club_id") %>" class="flex-1 text-center border-2 border-black py-3 font-bold uppercase text-[10px] hover:bg-red-500 hover:text-white transition-all">Leave X</a>
+                                <a href="ClubDetailController?id=<%= clubItem.get("club_id") %>" class="flex-1 text-center bg-black text-white py-3 font-bold uppercase text-[10px] border-2 border-black hover:bg-blue-400 transition-colors block leading-[normal] flex items-center justify-center">View Detail</a>
+                                <button onclick="showLeaveModal('<%= clubItem.get("club_id") %>', '<%= clubItem.get("name").toString().replace("'", "\\'") %>')" class="flex-1 text-center border-2 border-black py-3 font-bold uppercase text-[10px] hover:bg-red-500 hover:text-white transition-all cursor-pointer">Leave X</button>
                             </div>
                         </div>
                     <% 
@@ -75,5 +76,31 @@
                 </div>
             </div>
         </main>
+
+        <div id="modalLeave" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
+            <div class="bg-white border-4 border-black w-full max-w-md shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] p-8">
+                <h2 class="text-3xl font-black uppercase tracking-tighter mb-4 text-red-500">Leave Squad?</h2>
+                <p class="font-bold text-sm mb-8 uppercase text-gray-600">Are you sure you want to leave <span id="leaveClubName" class="text-black font-black bg-yellow-200 px-1 border border-black"></span>? You will lose access to team updates and tournaments.</p>
+                <div class="flex gap-4">
+                    <button onclick="hideLeaveModal()" class="flex-1 border-2 border-black py-3 font-black uppercase text-xs hover:bg-gray-100 transition-colors">Cancel</button>
+                    <a id="confirmLeaveBtn" href="#" class="flex-1 bg-red-500 text-white border-2 border-black py-3 font-black uppercase text-xs text-center hover:bg-black transition-colors shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">Yes, Leave</a>
+                </div>
+            </div>
+        </div>
+
+        <script>
+        function showLeaveModal(clubId, clubName) {
+            document.getElementById('leaveClubName').innerText = clubName;
+            document.getElementById('confirmLeaveBtn').href = 'LeaveController?club_id=' + clubId;
+            document.getElementById('modalLeave').classList.remove('hidden');
+        }
+
+        function hideLeaveModal() {
+            document.getElementById('modalLeave').classList.add('hidden');
+        }
+        function hideModal() {
+            document.getElementById('modalDetail').classList.add('hidden');
+        }
+        </script>
     </body>
 </html>

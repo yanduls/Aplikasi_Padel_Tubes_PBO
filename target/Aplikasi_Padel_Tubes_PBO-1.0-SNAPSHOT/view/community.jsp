@@ -42,7 +42,8 @@ Author     : ALFIAN
         <span class="text-xs font-bold uppercase tracking-widest text-blue-400">Community</span>
     </div>
     <div class="p-4 md:p-6 w-1/2 md:w-1/4 flex items-center justify-end gap-4">
-        <span class="text-[10px] font-bold uppercase tracking-widest">
+        <a href="AchievementController" class="text-[10px] font-bold uppercase tracking-widest hover:text-blue-500">Achievements</a>
+        <span class="text-[10px] font-bold uppercase tracking-widest border-l border-grid pl-4">
             <%= session.getAttribute("user")%>
         </span>
         <div class="p-2 border-2 border-black bg-white">
@@ -92,6 +93,26 @@ Author     : ALFIAN
         <div class="mb-6 bg-red-100 border-4 border-red-500 px-6 py-4 font-black uppercase text-sm text-red-700">
             ⚠ Nama dan deskripsi wajib diisi!
         </div>
+        <% } else if ("joined_success".equals(status)) { %>
+        <div class="mb-6 bg-lime-400 border-4 border-black px-6 py-4 font-black uppercase text-sm shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
+            ✓ Berhasil bergabung dengan squad!
+        </div>
+        <% } else if ("already_joined".equals(status)) { %>
+        <div class="mb-6 bg-yellow-300 border-4 border-black px-6 py-4 font-black uppercase text-sm shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
+            ⚠ Kamu sudah bergabung dengan squad ini!
+        </div>
+        <% } else if ("error_db".equals(status) || "error".equals(status)) { %>
+        <div class="mb-6 bg-red-100 border-4 border-red-500 px-6 py-4 font-black uppercase text-sm text-red-700">
+            ⚠ Terjadi kesalahan sistem. Silakan coba lagi!
+        </div>
+        <% } else if ("already_requested".equals(status)) { %>
+        <div class="mb-6 bg-yellow-300 border-4 border-black px-6 py-4 font-black uppercase text-sm shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
+            ⚠ Permintaan bergabung masih menunggu persetujuan Admin!
+        </div>
+        <% } else if ("request_sent".equals(status)) { %>
+        <div class="mb-6 bg-blue-300 border-4 border-black px-6 py-4 font-black uppercase text-sm shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
+            ✓ Permintaan bergabung terkirim! Menunggu persetujuan Admin.
+        </div>
         <% } %>
 
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
@@ -100,7 +121,10 @@ Author     : ALFIAN
                 <div>
                     <div class="flex justify-between items-start mb-4">
                         <h3 class="text-2xl font-black uppercase tracking-tighter leading-none">${club.name}</h3>
-                        <span class="bg-blue-400 text-[10px] font-black px-2 py-1 border border-black uppercase">${club.status}</span>
+                        <div class="flex gap-2">
+                            <span class="${club.type == 'PRIVATE' ? 'bg-red-500 text-white' : 'bg-lime-400 text-black'} text-[10px] font-black px-2 py-1 border border-black uppercase">${club.type}</span>
+                            <span class="bg-blue-400 text-[10px] font-black px-2 py-1 border border-black uppercase">${club.status}</span>
+                        </div>
                     </div>
                     <p class="text-xs font-bold text-gray-500 uppercase mb-6 leading-relaxed">
                         ${club.description}
@@ -139,16 +163,31 @@ Author     : ALFIAN
                 <h2 id="mTitle" class="text-4xl md:text-5xl font-black uppercase tracking-tighter mt-2"></h2>
             </div>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <div>
-                    <h4 class="text-xs font-black uppercase opacity-40 mb-2 underline decoration-2 underline-offset-4">About Squad</h4>
-                    <p id="mDesc" class="font-bold text-sm leading-relaxed uppercase"></p>
+                <div class="space-y-6">
+                    <div>
+                        <h4 class="text-xs font-black uppercase opacity-40 mb-2 underline decoration-2 underline-offset-4">About Squad</h4>
+                        <p id="mDesc" class="font-bold text-sm leading-relaxed uppercase"></p>
+                    </div>
+                    
+                    <div class="border-2 border-black p-4 bg-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] mt-2">
+                        <h4 class="text-[10px] font-black uppercase mb-3 bg-black text-white px-2 py-1 inline-block">Recent Match History</h4>
+                        <div class="flex flex-col gap-2">
+                            <div class="flex justify-between items-center text-xs font-bold border-b border-gray-200 pb-2">
+                                <span>VS <span class="opacity-50">Smashers Club</span></span> <span class="bg-lime-400 border border-black px-2 py-1 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">WIN (6-4, 6-2)</span>
+                            </div>
+                            <div class="flex justify-between items-center text-xs font-bold pb-1 pt-1">
+                                <span>VS <span class="opacity-50">Net Ninjas</span></span> <span class="bg-red-400 text-white border border-black px-2 py-1 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">LOSS (3-6, 5-7)</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="bg-gray-100 border-2 border-black p-4">
+
+                <div class="bg-gray-100 border-2 border-black p-4 h-full shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
                     <h4 class="text-xs font-black uppercase mb-4 flex items-center gap-2 border-b-2 border-black pb-2">
                         <div class="w-2 h-2 bg-lime-400 border border-black rounded-full"></div>
                         Squad Members
                     </h4>
-                    <ul id="mMembers" class="text-sm font-bold space-y-2 uppercase max-h-40 overflow-y-auto pr-2"></ul>
+                    <ul id="mMembers" class="text-sm font-bold space-y-2 uppercase max-h-80 overflow-y-auto pr-2"></ul>
                 </div>
             </div>
         </div>
@@ -167,7 +206,7 @@ function showDetail(clubId) {
 
     modal.classList.remove('hidden');
 
-    fetch('ClubDetailController?id=' + clubId)
+    fetch('ClubDetailController?format=json&id=' + clubId)
     .then(response => response.json())
     .then(data => {
         if (data.error) {

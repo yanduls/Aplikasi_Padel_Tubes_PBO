@@ -158,9 +158,19 @@
                             <circle cx="9" cy="7" r="4"></circle>
                             <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
                             <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
-                            </svg>   
+                            </svg>  
                         </div>
                         <span class="font-black uppercase text-sm tracking-tighter">Community</span>
+                    </a>
+
+                    <a href="AchievementController" class="group flex flex-col items-center gap-4 text-center">
+                        <div class="w-20 h-20 bg-purple-400 border-4 border-black rounded-2xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-all duration-300">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="8" r="7"></circle>
+                                <polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline>
+                            </svg>
+                        </div>
+                        <span class="font-black uppercase text-sm tracking-tighter">Achievements</span>
                     </a>
                 </div>
             </div>

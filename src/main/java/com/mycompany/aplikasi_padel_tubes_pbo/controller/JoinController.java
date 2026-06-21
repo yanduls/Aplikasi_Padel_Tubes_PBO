@@ -47,29 +47,52 @@ public class JoinController extends HttpServlet {
         int clubId = Integer.parseInt(clubIdStr);
 
         try (Connection conn = Koneksi.getConnection()) {
-            // 3. CEK DULU: Apakah user ini sudah pernah gabung di komunitas ini?
-            // (Biar datanya nggak double di tabel club_member)
+            // 3. CEK DULU TIPE KLUB
+            String clubSql = "SELECT type FROM club WHERE club_id = ?";
+            PreparedStatement psClub = conn.prepareStatement(clubSql);
+            psClub.setInt(1, clubId);
+            ResultSet rsClub = psClub.executeQuery();
+            
+            if (!rsClub.next()) {
+                response.sendRedirect("CommunityController?status=error");
+                return;
+            }
+            
+            String clubType = rsClub.getString("type");
+
+            // 4. CEK APAKAH SUDAH JOIN ATAU PENDING
             String checkSql = "SELECT * FROM club_member WHERE club_id = ? AND user_id = ?";
             PreparedStatement checkPs = conn.prepareStatement(checkSql);
             checkPs.setInt(1, clubId);
             checkPs.setInt(2, userId);
             ResultSet rs = checkPs.executeQuery();
 
-            if (rs.next()) {
-                // Kalau datanya ketemu, berarti udah pernah join
-                // Kembalikan ke halaman community dengan status peringatan
-                response.sendRedirect("CommunityController?status=already_joined");
-            } else {
-                // 4. Kalau belum join, masukkan ke tabel club_member
-                String insertSql = "INSERT INTO club_member (club_id, user_id) VALUES (?, ?)";
-                PreparedStatement insertPs = conn.prepareStatement(insertSql);
-                insertPs.setInt(1, clubId);
-                insertPs.setInt(2, userId);
-                
-                insertPs.executeUpdate();
+            String checkReqSql = "SELECT * FROM club_request WHERE club_id = ? AND user_id = ?";
+            PreparedStatement checkReqPs = conn.prepareStatement(checkReqSql);
+            checkReqPs.setInt(1, clubId);
+            checkReqPs.setInt(2, userId);
+            ResultSet rsReq = checkReqPs.executeQuery();
 
-                // Berhasil join, kembali ke halaman community
-                response.sendRedirect("CommunityController?status=joined_success");
+            if (rs.next()) {
+                response.sendRedirect("CommunityController?status=already_joined");
+            } else if (rsReq.next()) {
+                response.sendRedirect("CommunityController?status=already_requested");
+            } else {
+                if ("PRIVATE".equalsIgnoreCase(clubType)) {
+                    String insertSql = "INSERT INTO club_request (club_id, user_id) VALUES (?, ?)";
+                    PreparedStatement insertPs = conn.prepareStatement(insertSql);
+                    insertPs.setInt(1, clubId);
+                    insertPs.setInt(2, userId);
+                    insertPs.executeUpdate();
+                    response.sendRedirect("CommunityController?status=request_sent");
+                } else {
+                    String insertSql = "INSERT INTO club_member (club_id, user_id) VALUES (?, ?)";
+                    PreparedStatement insertPs = conn.prepareStatement(insertSql);
+                    insertPs.setInt(1, clubId);
+                    insertPs.setInt(2, userId);
+                    insertPs.executeUpdate();
+                    response.sendRedirect("CommunityController?status=joined_success");
+                }
             }
 
         } catch (SQLException e) {

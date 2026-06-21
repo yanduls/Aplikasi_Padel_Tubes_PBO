@@ -79,7 +79,7 @@
                 </div>
 
                 <div class="bg-gray-100 border-4 border-black p-6">
-                    <h4 class="text-xl font-black uppercase mb-4 border-b-2 border-black pb-2">r</h4>
+                    <h4 class="text-xl font-black uppercase mb-4 border-b-2 border-black pb-2">Squad Members</h4>
                     <ul class="text-sm font-bold space-y-2 uppercase">
                         <% if (memberList != null && !memberList.isEmpty()) { 
                                for (String memberName : memberList) { %>
@@ -92,6 +92,33 @@
                         <% } %>
                     </ul>
                 </div>
+
+                <% 
+                    Boolean isAdmin = (Boolean) club.get("isAdmin");
+                    if (isAdmin != null && isAdmin) { 
+                        java.util.List<java.util.Map<String, Object>> pendingReqs = (java.util.List<java.util.Map<String, Object>>) request.getAttribute("pendingRequests");
+                %>
+                <div class="bg-yellow-200 border-4 border-black p-6 mt-8">
+                    <h4 class="text-xl font-black uppercase mb-4 border-b-2 border-black pb-2 text-red-600">Pending Requests</h4>
+                    <ul class="text-sm font-bold space-y-4 uppercase">
+                        <% if (pendingReqs != null && !pendingReqs.isEmpty()) { 
+                               for (java.util.Map<String, Object> req : pendingReqs) { %>
+                            <li class="flex flex-col gap-2 border-b-2 border-black/20 pb-4">
+                                <div class="flex items-center gap-2">
+                                    <span class="w-2 h-2 bg-red-500"></span> <%= req.get("username") %>
+                                </div>
+                                <div class="flex gap-2">
+                                    <a href="ApproveRequestController?club_id=<%= club.get("club_id") %>&user_id=<%= req.get("user_id") %>&request_id=<%= req.get("request_id") %>" class="flex-1 bg-lime-400 text-black border-2 border-black py-2 text-center text-xs hover:bg-black hover:text-white transition-colors">✓ APPROVE</a>
+                                    <a href="RejectRequestController?club_id=<%= club.get("club_id") %>&request_id=<%= req.get("request_id") %>" class="flex-1 bg-red-500 text-white border-2 border-black py-2 text-center text-xs hover:bg-black transition-colors">X REJECT</a>
+                                </div>
+                            </li>
+                        <%     }
+                           } else { %>
+                            <li class="opacity-50 italic">No pending requests.</li>
+                        <% } %>
+                    </ul>
+                </div>
+                <% } %>
             </div>
         </main>
         <% } %>

@@ -48,6 +48,10 @@
         <servlet-name>createcommunitycontroller</servlet-name>
         <servlet-class>com.mycompany.aplikasi_padel_tubes_pbo.controller.createcommunitycontroller</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>AchievementController</servlet-name>
+        <servlet-class>com.mycompany.aplikasi_padel_tubes_pbo.controller.AchievementController</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>PadelController</servlet-name>
         <url-pattern>/padel</url-pattern>
@@ -95,6 +99,10 @@
     <servlet-mapping>
         <servlet-name>createcommunitycontroller</servlet-name>
         <url-pattern>/createcommunitycontroller</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AchievementController</servlet-name>
+        <url-pattern>/AchievementController</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
